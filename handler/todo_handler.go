@@ -32,6 +32,7 @@ func (h *Handler) Index(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
+	//TODO: 一旦このまま進めたい。後ほど確認予定
 	if err := r.ParseMultipartForm(32 << 20); err != nil {
 		logger.Error(err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -44,7 +45,10 @@ func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ins.Exec(r.Form.Get("name"), r.Form.Get("content"), time.Now())
+	if err := ins.Exec(r.Form.Get("name"), r.Form.Get("content"), time.Now()); err != nil {
+		logger.Error(err)
+		return
+	}
 
 	if err := json.NewEncoder(w).Encode(&ins); err != nil {
 		logger.Error(err)
@@ -53,6 +57,7 @@ func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) Update(w http.ResponseWriter, r *http.Request) {
+	//TODO: 一旦このまま進めたい。後ほど確認予定
 	if err := r.ParseMultipartForm(32 << 20); err != nil {
 		logger.Error(err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -65,7 +70,11 @@ func (h *Handler) Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	upd.Exec(r.Form.Get("name"), r.Form.Get("content"), r.Form.Get("id"))
+	if err := upd.Exec(r.Form.Get("name"), r.Form.Get("content"), r.Form.Get("id")); err != nil {
+		logger.Error(err)
+		return
+	}
+
 	if err := json.NewEncoder(w).Encode(&upd); err != nil {
 		logger.Error(err)
 		return
@@ -73,6 +82,7 @@ func (h *Handler) Update(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {
+	//TODO: 一旦このまま進めたい。後ほど確認予定
 	if err := r.ParseMultipartForm(32 << 20); err != nil {
 		logger.Error(err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -85,7 +95,11 @@ func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	del.Exec(r.Form.Get("id"))
+	if err := del.Exec(r.Form.Get("id")); err != nil {
+		logger.Error(err)
+		return
+	}
+
 	if err := json.NewEncoder(w).Encode(&del); err != nil {
 		logger.Error(err)
 		return
