@@ -21,14 +21,14 @@ func NewRepo(ctx context.Context, conf *config.Config) (*Repo, error) {
 		return nil, err
 	}
 
-	if _, err = dbconn.DB.Exec(`CREATE TABLE IF NOT EXISTS todo(id INT PRIMARY KEY AUTO_INCREMENT, name TEXT, content TEXT, createdAt DATETIME)`); err != nil {
+	if _, err = dbconn.Exec(`CREATE TABLE IF NOT EXISTS todo(id INT PRIMARY KEY AUTO_INCREMENT, name TEXT, content TEXT, createdAt DATETIME)`); err != nil {
 		logger.Error(err)
 		return nil, err
 	}
-	return &Repo{dbconn.DB}, nil
+	return &Repo{dbconn}, nil
 }
 
-func newDBClient(conf *config.Config) (*Repo, error) {
+func newDBClient(conf *config.Config) (*sql.DB, error) {
 	jst, err := time.LoadLocation("Asia/Tokyo")
 	if err != nil {
 		return nil, err
@@ -50,5 +50,5 @@ func newDBClient(conf *config.Config) (*Repo, error) {
 		return nil, err
 	}
 
-	return &Repo{db}, nil
+	return db, nil
 }
