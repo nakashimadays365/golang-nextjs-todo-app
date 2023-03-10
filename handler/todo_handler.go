@@ -32,8 +32,7 @@ func (h *Handler) Index(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
-	//TODO: 一旦このまま進めたい。後ほど確認予定
-	if err := r.ParseMultipartForm(32 << 20); err != nil {
+	if err := r.ParseForm(); err != nil {
 		logger.Error(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -57,8 +56,7 @@ func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) Update(w http.ResponseWriter, r *http.Request) {
-	//TODO: 一旦このまま進めたい。後ほど確認予定
-	if err := r.ParseMultipartForm(32 << 20); err != nil {
+	if err := r.ParseForm(); err != nil {
 		logger.Error(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -82,8 +80,7 @@ func (h *Handler) Update(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {
-	//TODO: 一旦このまま進めたい。後ほど確認予定
-	if err := r.ParseMultipartForm(32 << 20); err != nil {
+	if err := r.ParseForm(); err != nil {
 		logger.Error(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
