@@ -13,7 +13,13 @@ import (
 
 func main() {
 	ctx := context.Background()
-	cfg, err := config.NewConfig()
+
+	appEnv := os.Getenv("APP_ENV")
+	cfg, err := config.NewConfig(appEnv)
+	if err != nil {
+		logger.Error(err)
+		return
+	}
 	rp, err := repo.NewRepo(ctx, cfg)
 	if err != nil {
 		logger.Error(err)
