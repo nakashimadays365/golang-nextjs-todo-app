@@ -1,6 +1,11 @@
 package config
 
-import "os"
+import (
+	"fmt"
+	"gopkg.in/yaml.v2"
+	"os"
+	"todo/logger"
+)
 
 type Config struct {
 	DBConfig DBConfig `yaml:"db"`
@@ -13,13 +18,19 @@ type DBConfig struct {
 	User string `yaml:"user"`
 }
 
-func NewConfig() (*Config, error) {
+func NewConfig(env string) (*Config, error) {
+	f, err := os.Open(fmt.Sprintf("%s.yaml", env))
+	if err != nil {
+		logger.Error(err)
+		return nil, err
+	}
 
-	var conf Config
-	conf.DBConfig.Name = os.Getenv("MYSQL_NAME")
-	conf.DBConfig.Host = os.Getenv("MYSQL_HOST")
-	conf.DBConfig.Pass = os.Getenv("MYSQL_PASS")
-	conf.DBConfig.User = os.Getenv("MYSQL_USER")
+	defer f.Close()
+	conf := Config{}
+	if err := yaml.NewDecoder(f).Decode(&conf); err != nil {
+		logger.Error(err)
+		return nil, err
+	}
 
 	return &conf, nil
 }
