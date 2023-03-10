@@ -26,7 +26,7 @@ func NewConfig(env string) (*Config, error) {
 	}
 
 	defer f.Close()
-	conf := Config{}
+	var conf Config
 	if err := yaml.NewDecoder(f).Decode(&conf); err != nil {
 		logger.Error(err)
 		return nil, err
