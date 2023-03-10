@@ -9,7 +9,6 @@ import (
 	"todo/logger"
 
 	"github.com/go-sql-driver/mysql"
-	_ "github.com/go-sql-driver/mysql"
 )
 
 type Repo struct {
@@ -22,25 +21,25 @@ func NewRepo(ctx context.Context, conf *config.Config) (*Repo, error) {
 		return nil, err
 	}
 
-	if _, err = dbconn.DB.Exec(`CREATE TABLE IF NOT EXISTS todo(id INT PRIMARY KEY AUTO_INCREMENT, name TEXT, content TEXT, time DATETIME)`); err != nil {
+	if _, err = dbconn.DB.Exec(`CREATE TABLE IF NOT EXISTS todo(id INT PRIMARY KEY AUTO_INCREMENT, name TEXT, content TEXT, createdAt DATETIME)`); err != nil {
 		logger.Error(err)
 		return nil, err
 	}
 	return &Repo{dbconn.DB}, nil
 }
 
-func newDBClient(user, pass, host, dbname string) (*Repo, error) {
+func newDBClient(conf *config.Config) (*Repo, error) {
 	jst, err := time.LoadLocation("Asia/Tokyo")
 	if err != nil {
 		return nil, err
 	}
 
 	mc := mysql.Config{
-		User:                 user,
-		Passwd:               pass,
+		User:                 conf.DBName.user,
+		Passwd:               conf.DBName.pass,
 		Net:                  "tcp",
-		Addr:                 host + ":" + "3307",
-		DBName:               dbname,
+		Addr:                 conf.DBName.host + ":3307",
+		DBName:               conf.DBName.name,
 		AllowNativePasswords: true,
 		ParseTime:            true,
 		Loc:                  jst,
