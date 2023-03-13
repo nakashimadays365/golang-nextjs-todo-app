@@ -1,0 +1,29 @@
+version: "3"
+services:
+  go-app:
+    build:
+      dockerfile: docker/Dockerfile
+    tty: true
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    environment:
+      MYSQL_DATABASE: todo_db
+      MYSQL_HOST: mysql_host
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+  db:
+    image: mysql:8
+    container_name: mysql_host
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: todo_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      TZ: "Asia/Tokyo"
+      MYSQL_TCP_PORT: 3307
+    volumes:
+      - ./docker/db/my.cnf:/etc/my.cnf
+    ports:
+      - 3307:3307
