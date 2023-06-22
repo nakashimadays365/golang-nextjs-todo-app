@@ -1,0 +1,5 @@
+db:
+  name: todo_db
+  host: localhost
+  pass: password
+  user: user
